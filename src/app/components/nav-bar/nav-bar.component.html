@@ -1,0 +1,25 @@
+<mat-toolbar class="nav-bar">
+  <!-- Botón del menú con borde (mat-button con ícono) -->
+  <button mat-button [matMenuTriggerFor]="menu" aria-label="Menú">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <!-- Título de la aplicación -->
+  <span class="app-title">SOFTWARE ING</span>
+
+  <!-- Espaciado entre los botones -->
+  <span class="spacer"></span>
+
+</mat-toolbar>
+
+<!-- Menú desplegable -->
+<mat-menu #menu="matMenu">
+  <button mat-menu-item [routerLink]="'/'">
+    <mat-icon>home</mat-icon> Inicio
+  </button>
+  <button mat-menu-item [routerLink]="'/credito'">
+    <mat-icon>credit_card</mat-icon> Crédito
+  </button>
+  <button mat-menu-item [routerLink]="'/configuracion'">
+    <mat-icon>settings</mat-icon> Configuración
+  </button>
+</mat-menu>

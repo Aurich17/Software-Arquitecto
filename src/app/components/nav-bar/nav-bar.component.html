@@ -1,25 +1,15 @@
-<mat-toolbar class="nav-bar">
-  <!-- Botón del menú con borde (mat-button con ícono) -->
-  <button mat-button [matMenuTriggerFor]="menu" aria-label="Menú">
-    <mat-icon>menu</mat-icon>
-  </button>
-  <!-- Título de la aplicación -->
-  <span class="app-title">SOFTWARE ING</span>
+<p-menubar [model]="items">
+  <ng-template pTemplate="start">
+      <button pButton pRipple type="button" icon="pi pi-bars" (click)="menu.toggle($event)" class="p-button-text"></button>
+  </ng-template>
 
-  <!-- Espaciado entre los botones -->
-  <span class="spacer"></span>
+  <ng-template pTemplate="center">
+      <span class="app-title">SOFTWARE ING</span>
+  </ng-template>
 
-</mat-toolbar>
+  <ng-template pTemplate="end">
+      <i class="pi pi-sign-out" style="font-size: 2rem" (click)="cerraSesion()"></i>
+  </ng-template>
+</p-menubar>
 
-<!-- Menú desplegable -->
-<mat-menu #menu="matMenu">
-  <button mat-menu-item [routerLink]="'/'">
-    <mat-icon>home</mat-icon> Inicio
-  </button>
-  <button mat-menu-item [routerLink]="'/credito'">
-    <mat-icon>credit_card</mat-icon> Crédito
-  </button>
-  <button mat-menu-item [routerLink]="'/configuracion'">
-    <mat-icon>settings</mat-icon> Configuración
-  </button>
-</mat-menu>
+<p-tieredMenu #menu [model]="items" [popup]="true"></p-tieredMenu>

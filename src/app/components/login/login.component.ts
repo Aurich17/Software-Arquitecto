@@ -1,41 +1,112 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { FormGroup, FormBuilder, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext'; // Importar módulo de InputText
 import { PasswordModule } from 'primeng/password'; // Importar módulo de Password
+import { DialogModule } from 'primeng/dialog';
+import { LoginRequest } from './request/login.request';
+import { MessageModule } from 'primeng/message';
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [PasswordModule,InputTextModule,CommonModule, ReactiveFormsModule,ButtonModule], // Importar correctamente
+  imports: [ToastModule,PasswordModule, InputTextModule, CommonModule, ReactiveFormsModule, ButtonModule, DialogModule, MessageModule], // Importar correctamente
   templateUrl: './login.component.html',
+  providers: [MessageService],
   styleUrl: './login.component.css'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm: FormGroup;
   loginError: boolean = false;
+  errorMessage: string = '';
+  visible: boolean = false;
+  registerForm!: FormGroup;
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private readonly authService: AuthService, private router: Router, private messageService: MessageService ) {
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      username: ['', [Validators.required]], // Cambié 'email' por 'username'
+      password: ['', [Validators.required, Validators.minLength(4)]]
     });
   }
 
+
+  ngOnInit():void {
+    this.iniciaFormulario();
+  }
+
+  iniciaFormulario(){
+    this.registerForm = new FormGroup({
+      username: new FormControl(null, null),
+      password: new FormControl(null, null),
+      correo: new FormControl(null, null)
+    });
+  }
   onSubmit() {
     if (this.loginForm.valid) {
-      const { email, password } = this.loginForm.value;
+      const { username, password } = this.loginForm.value;
 
-      if (this.authService.login(email, password)) {
-        console.log('Llega al Route')
-        this.router.navigate(['/credito']); // Redirige después del login
-      } else {
-        this.loginError = true;
-      }
+      this.authService.login(username, password).subscribe(
+        (response) => {
+          if (response.success && response.token) {
+            this.authService.setToken(response.token); // Guarda el token y actualiza el estado de autenticación
+            this.router.navigate(['/credito']); // Redirigir después del login
+          } else {
+            this.loginError = true;
+            this.errorMessage = 'Usuario o contraseña incorrectos';
+          }
+        },
+        (error) => {
+          this.loginError = true;
+          this.errorMessage = 'Error al iniciar sesión';
+        }
+      );
     }
+  }
+
+  get isAuthenticated(): boolean {
+    return this.authService.isAuthenticated();
+  }
+
+
+  showDialog() {
+    this.visible = true;
+  }
+
+  registerUser() {
+    const values = this.registerForm.value;
+    console.log('Registrando usuario:', values);
+    const request: LoginRequest = {
+      username: values.username,
+      password: values.password,
+      email: values.correo
+    };
+
+    this.authService.registerUser(request).subscribe(
+      (response) => {
+        console.log('Registro exitoso:', response);
+        this.visible = false; // Cierra el diálogo después de guardar
+
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Registro exitoso',
+          detail: 'El usuario se ha registrado correctamente'
+        });
+      },
+      (error) => {
+        console.error('Error al registrar:', error);
+
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error en el registro',
+          detail: 'Hubo un problema al registrar el usuario'
+        });
+      }
+    );
   }
 }
 

@@ -4,7 +4,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('https://source.unsplash.com/1600x900/?architecture,building') no-repeat center center;
+  /* background: url('/src/app/assets/imgs/fonfo.jpg') no-repeat center center; */
+  background-color: rgb(185, 245, 208);
+  /* background-image: url('/src/app/assets/imgs/fonfo.jpg') no-repeat center center; */
   background-size: cover;
   position: relative;
 }
@@ -29,6 +31,24 @@
   text-align: center;
   animation: fadeIn 0.5s ease-in-out;
 }
+
+a {
+  display: block;
+  margin-top: 10px;
+  text-align: center;
+  color: #1e2935; /* Azul estándar */
+  text-decoration: none;
+  font-weight: bold;
+  font-size: 14px;
+  transition: color 0.3s ease-in-out;
+}
+
+a:hover {
+  color: #34c55f; /* Azul más oscuro al pasar el mouse */
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 
 /* Animación de entrada */
 @keyframes fadeIn {
@@ -61,7 +81,7 @@
 }
 
 .input-group input:focus {
-  border-color: #007bff;
+  border-color: #36eb54;
   outline: none;
 }
 
@@ -69,7 +89,7 @@
 button {
   width: 100%;
   padding: 12px;
-  background: #007bff;
+  /* background: #007bff; */
   color: white;
   border: none;
   border-radius: 6px;
@@ -77,10 +97,6 @@ button {
   font-weight: bold;
   cursor: pointer;
   transition: background 0.3s ease;
-}
-
-button:hover {
-  background: #0056b3;
 }
 
 /* Mensajes de error */
@@ -106,4 +122,8 @@ button:hover {
     font-size: 14px;
     padding: 10px;
   }
+}
+
+.hidden-dialog {
+  display: none;
 }

@@ -5,10 +5,10 @@ import { NavBarComponent } from './components/nav-bar/nav-bar.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
 
-export const routes: Routes = [ // Página de inicio (puedes cambiarla)
-  { path: '**', redirectTo: 'login' },
-  { path: 'login', component: LoginComponent },
-  { path: 'credito', component: CreditoComponent, canActivate: [AuthGuard]  }, // Ruta para el crédito
-  { path: '**', redirectTo: '', pathMatch: 'full' } // Redirección en caso de rutas incorrectas
-
+export const routes: Routes = [
+  { path: 'login', component: LoginComponent}, // Evita acceso al login si ya está autenticado
+  { path: 'credito', component: CreditoComponent, canActivate: [AuthGuard] },
+  { path: 'corte-laser', component: CreditoComponent, canActivate: [AuthGuard] },
+  { path: 'portafolio', component: CreditoComponent, canActivate: [AuthGuard] },
+  { path: '', component: LoginComponent},
 ];

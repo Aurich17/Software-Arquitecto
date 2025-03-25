@@ -60,4 +60,8 @@ export class AuthService {
     localStorage.setItem(this.tokenKey, token);
     this.authStatus.next(true);
   }
+
+  setRol(rol:string):void{
+    localStorage.setItem('rol', rol);
+  }
 }

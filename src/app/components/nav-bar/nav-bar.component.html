@@ -1,14 +1,15 @@
 <p-menubar [model]="items">
   <ng-template pTemplate="start">
-      <button pButton pRipple type="button" icon="pi pi-bars" (click)="menu.toggle($event)" class="p-button-text"></button>
+    <img src="logo.jpg" alt="Logo" class="navbar-logo">
+    <button pButton pRipple type="button" icon="pi pi-bars" (click)="menu.toggle($event)" class="p-button-text"></button>
   </ng-template>
 
   <ng-template pTemplate="center">
-      <span class="app-title">SOFTWARE ING</span>
+    <span class="app-title">SOFTWARE ING</span>
   </ng-template>
 
   <ng-template pTemplate="end">
-      <i class="pi pi-sign-out" style="font-size: 2rem" (click)="cerraSesion()"></i>
+    <i class="pi pi-sign-out" style="font-size: 2rem" (click)="cerraSesion()"></i>
   </ng-template>
 </p-menubar>
 

@@ -1,6 +1,11 @@
 <div class="login-container" *ngIf="!isAuthenticated">
   <div class="login-box">
+    <!-- LOGO DE LA EMPRESA -->
+    
     <h2>Inicio de Sesión</h2>
+    <div class="logo-container">
+      <img src="/logo.jpg">
+    </div>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
       <div class="input-group">
@@ -18,42 +23,37 @@
 
       <button pButton label="Iniciar Sesión" icon="pi pi-sign-in" type="submit" [disabled]="loginForm.invalid"></button>
 
-        <a (click)="showDialog()">Registrarse</a>
+      <a (click)="showDialog()">Registrarse</a>
     </form>
     <p *ngIf="loginError" class="error-message">{{ errorMessage }}</p>
   </div>
 </div>
 
-
-
-<!-- NUEVO CREDITO  -->
+<!-- MODAL DE REGISTRO -->
 <p-dialog
   header="Registro"
   [modal]="true"
   [(visible)]="visible"
   [style]="{ width: '25rem', height: '26rem' }"
+  [dismissableMask]="true"
 >
+  <form [formGroup]="registerForm">
+    <div class="input-group">
+      <label for="username">Nombre Usuario</label>
+      <input id="username" type="text" formControlName="username" placeholder="Ingresa tu nombre de usuario" pInputText>
+    </div>
 
-  <!-- <div class="login-box"> -->
-    <!-- <h2 style="text-align: center;">Registro</h2> -->
+    <div class="input-group">
+      <label for="password">Contraseña</label>
+      <input id="password" type="password" formControlName="password" placeholder="••••••">
+    </div>
 
-    <form [formGroup]="registerForm">
-      <div class="input-group">
-        <label for="username">Nombre Usuario</label>
-        <input id="username" type="text" formControlName="username" placeholder="Ingresa tu nombre de usuario" pInputText>
-      </div>
+    <div class="input-group">
+      <label for="correo">Correo</label>
+      <input id="correo" type="text" formControlName="correo" placeholder="Ingresa tu correo" pInputText>
+    </div>
 
-      <div class="input-group">
-        <label for="password">Contraseña</label>
-        <input id="password" type="password" formControlName="password" placeholder="••••••">
-      </div>
-
-      <div class="input-group">
-        <label for="correo">Correo</label>
-        <input id="correo" type="text" formControlName="correo" placeholder="Ingresa tu correo" pInputText>
-      </div>
-      <button pButton label="Registrarse" (click)="registerUser()"></button>
-    </form>
-  <!-- </div> -->
+    <button pButton label="Registrarse" (click)="registerUser()"></button>
+  </form>
 </p-dialog>
 <p-toast></p-toast>

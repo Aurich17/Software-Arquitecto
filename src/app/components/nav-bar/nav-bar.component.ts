@@ -30,7 +30,7 @@ export class NavBarComponent {
   items = [
     { label: 'Inicio', icon: 'pi pi-home', routerLink: ['/'] },
     { label: 'Crédito', icon: 'pi pi-credit-card', routerLink: ['/credito'] },
-    { label: 'Configuración', icon: 'pi pi-cog', routerLink: ['/configuracion'] }
+    { label: 'Corte Laser', icon: 'pi pi-cog', routerLink: ['/corte_laser'] }
   ];
 
   cerraSesion() {

@@ -5,8 +5,8 @@
   align-items: center;
   justify-content: center;
   /* background: url('/src/app/assets/imgs/fonfo.jpg') no-repeat center center; */
-  background-color: rgb(185, 245, 208);
-  /* background-image: url('/src/app/assets/imgs/fonfo.jpg') no-repeat center center; */
+  background-color: rgb(0, 0, 0);
+  background-image: url('/fonfo.jpg');
   background-size: cover;
   position: relative;
 }
@@ -126,4 +126,33 @@ button {
 
 .hidden-dialog {
   display: none;
+}
+
+
+/* Contenedor del logo */
+.logo-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 15px;
+}
+
+/* Estilo del logo */
+.logo-container img {
+  max-width: 120px; /* Ajusta el tamaño del logo */
+  height: auto;
+  border-radius: 8px; /* Opcional: añade bordes redondeados si lo deseas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para darle más estilo */
+  transition: transform 0.3s ease-in-out;
+}
+
+/* Efecto al pasar el mouse sobre el logo */
+.logo-container img:hover {
+  transform: scale(1.05);
+}
+
+.p-dialog-mask {
+  background: transparent !important;
+}
+.p-overlay-mask {
+  background: none !important;
 }

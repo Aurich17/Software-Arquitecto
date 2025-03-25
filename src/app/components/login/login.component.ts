@@ -54,6 +54,7 @@ export class LoginComponent implements OnInit {
         (response) => {
           if (response.success && response.token) {
             this.authService.setToken(response.token); // Guarda el token y actualiza el estado de autenticación
+            this.authService.setRol(response.rol)
             this.router.navigate(['/credito']); // Redirigir después del login
           } else {
             this.loginError = true;

@@ -40,3 +40,9 @@
 .mat-menu-item mat-icon {
   margin-right: 8px;
 }
+
+.navbar-logo {
+  height: 60px; /* Ajusta el tamaño del logo */
+  margin-right: 0px; /* Espaciado entre el logo y el botón */
+  /* width: 80px; */
+}

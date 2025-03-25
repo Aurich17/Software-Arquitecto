@@ -7,10 +7,19 @@
         <p-inputgroup-addon>
           <span class="pi pi-user"></span>
         </p-inputgroup-addon>
-        <input pInputText  placeholder="Nombre Usuario" formControlName="nombre_usuario"/>
+        <p-autocomplete
+          [style]="{'width': '100%'}"
+          [suggestions]="items"
+          (completeMethod)="search($event)"
+          optionLabel="nombre"
+          formControlName="nombre_usuario">
+        </p-autocomplete>
       </p-inputgroup>
+      <!-- <div class="card flex justify-center">
+        <p-autocomplete [(ngModel)]="value" [suggestions]="items" (completeMethod)="search($event)" />
+      </div> -->
     </div>
-    <p-button label="Buscar" icon="pi pi-search"/>
+    <p-button label="Buscar" icon="pi pi-search" (onClick)="listaCredito()"/>
     <p-button label="Nuevo Credito" icon="pi pi-plus" (onClick)="showDialog()"/>
   </div>
   <p-button label="Excel" icon="pi pi-file-excel"/>
@@ -19,33 +28,43 @@
 <div class="card">
   <p-table
       [paginator]="true"
-      [rows]="7"
-      [value]="products"
+      [rows]="5"
+      [value]="creditosTable"
       showGridlines
       [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template #header>
               <tr>
                   <th>Usuario</th>
-                  <th>Descripcion</th>
-                  <th>Monto</th>
-                  <th>Fecha Registro</th>
-                  <th>Fecha Actualizacion</th>
+                  <th>Monto Total</th>
+                  <th>Monto Pagado</th>
+                  <th>Monto Pendiente</th>
                   <th>Estado</th>
-                  <th>Comentarios</th>
+                  <th>Descripcion</th>
+                  <th>Fecha Vencimiento</th>
               </tr>
           </ng-template>
           <ng-template #body let-product>
             <tr>
-                <td>{{ product.usuario }}</td>
+                <td>{{ product.user_name }}</td>
+                <td>{{ product.monto_total }}</td>
+                <td>{{ product.monto_pagado }}</td>
+                <td>{{ product.monto_pendiente }}</td>
+                <td>{{ product.descripcion_estado }}</td>
                 <td>{{ product.descripcion }}</td>
-                <td>{{ product.monto }}</td>
-                <td>{{ product.fechaRegistro }}</td>
-                <td>{{ product.fechaActualizacion }}</td>
-                <td>{{ product.estado }}</td>
-                <td>{{ product.comentarios }}</td>
+                <td>{{ product.fecha_vencimiento }}</td>
             </tr>
           </ng-template>
   </p-table>
+</div>
+<div *ngIf="usuarioUnico" class="deuda-container">
+  <p-card class="deuda-card">
+    <ng-template pTemplate="title">
+      <span class="pi pi-dollar"></span> Deuda Total
+    </ng-template>
+    <ng-template pTemplate="content">
+      <p class="deuda-total">{{ deudaTotal | currency:'USD' }}</p>
+    </ng-template>
+  </p-card>
 </div>
 
 
@@ -55,7 +74,7 @@
   header="Nuevo Crédito"
   [modal]="true"
   [(visible)]="visible"
-  [style]="{ width: '30rem' }"
+  [style]="{ width: '30rem', height: 'auto' }"
   [contentStyle]="{ 'padding': '1.5rem' }">
 
   <form [formGroup]="creditoForm" (ngSubmit)="guardarCredito()" class="credito-form">
@@ -63,9 +82,17 @@
 
       <div class="p-field p-grid">
         <label for="usuario" class="p-col-12 p-md-4">Usuario</label>
-        <div class="p-col-12 p-md-8">
-          <input id="usuario" type="text" pInputText formControlName="usuario" placeholder="Ingrese el usuario" />
-        </div>
+        <p-inputgroup>
+          <p-autocomplete
+            [style]="{'width': '200%'}"
+            [suggestions]="items"
+            (completeMethod)="search($event)"
+            optionLabel="nombre"
+            formControlName="usuario"
+            placeholder="Ingrese usuario"
+            >
+          </p-autocomplete>
+        </p-inputgroup>
       </div>
 
       <div class="p-field p-grid">
@@ -82,13 +109,20 @@
         </div>
       </div>
 
+      <div class="p-field p-grid">
+        <label for="descripcion" class="p-col-12 p-md-4">Fecha Vencimiento</label>
+        <div class="p-col-12 p-md-8">
+          <p-datepicker formControlName="fecha_vencimiento" />
+        </div>
+      </div>
       <div class="p-d-flex p-jc-end p-mt-3">
         <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text p-mr-2" (click)="visible = false"></button>
-        <button pButton type="submit" label="Guardar" icon="pi pi-check" class="p-button" [disabled]="creditoForm.invalid"></button>
+        <button pButton type="submit" label="Guardar" icon="pi pi-check" class="p-button" [disabled]="creditoForm.invalid" (click)="mantCredito()"></button>
       </div>
 
     </div>
   </form>
 </p-dialog>
+<p-toast></p-toast>
 
 

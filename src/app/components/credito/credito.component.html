@@ -12,7 +12,8 @@
           [suggestions]="items"
           (completeMethod)="search($event)"
           optionLabel="nombre"
-          formControlName="nombre_usuario">
+          formControlName="nombre_usuario"
+          placeholder="Nombre usuario">
         </p-autocomplete>
       </p-inputgroup>
       <!-- <div class="card flex justify-center">
@@ -21,6 +22,7 @@
     </div>
     <p-button label="Buscar" icon="pi pi-search" (onClick)="listaCredito()"/>
     <p-button label="Nuevo Credito" icon="pi pi-plus" (onClick)="showDialog()"/>
+    <p-button label="Pagar Credito" icon="pi pi-dollar" (onClick)="showDialog()" *ngIf="usuarioUnico"/>
   </div>
   <p-button label="Excel" icon="pi pi-file-excel"/>
 </form>
@@ -115,9 +117,9 @@
           <p-datepicker formControlName="fecha_vencimiento" />
         </div>
       </div>
-      <div class="p-d-flex p-jc-end p-mt-3">
+      <div class="container_buttons">
         <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text p-mr-2" (click)="visible = false"></button>
-        <button pButton type="submit" label="Guardar" icon="pi pi-check" class="p-button" [disabled]="creditoForm.invalid" (click)="mantCredito()"></button>
+        <button pButton type="submit" label="Guardar" icon="pi pi-save" class="p-button" [disabled]="creditoForm.invalid" (click)="mantCredito()"></button>
       </div>
 
     </div>

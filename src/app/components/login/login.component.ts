@@ -43,7 +43,8 @@ export class LoginComponent implements OnInit {
     this.registerForm = new FormGroup({
       username: new FormControl(null, null),
       password: new FormControl(null, null),
-      correo: new FormControl(null, null)
+      correo: new FormControl(null, null),
+      telefono: new FormControl(null, null)
     });
   }
   onSubmit() {

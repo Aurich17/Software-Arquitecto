@@ -28,9 +28,12 @@ export class NavBarComponent {
 
   constructor(private readonly service: AuthService) { }
   items = [
-    { label: 'Inicio', icon: 'pi pi-home', routerLink: ['/'] },
+    // portafolio
+    // { label: 'Inicio', icon: 'pi pi-home', routerLink: ['/'] },
     { label: 'Crédito', icon: 'pi pi-credit-card', routerLink: ['/credito'] },
-    { label: 'Corte Laser', icon: 'pi pi-cog', routerLink: ['/corte_laser'] }
+    { label: 'Corte Laser', icon: 'pi pi-cog', routerLink: ['/corte_laser'] },
+    { label: 'Portafolio', icon: 'pi pi-briefcase', routerLink: ['/portafolio'] }
+
   ];
 
   cerraSesion() {

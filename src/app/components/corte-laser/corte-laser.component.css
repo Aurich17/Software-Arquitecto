@@ -1,0 +1,123 @@
+@import "primeicons/primeicons.css";
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-scheme: light !important; /* Obligar modo claro */
+  }
+}
+/* ======= ESTILOS GENERALES ======= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  /* background-color: red; */
+}
+
+/* ======= TÍTULO ======= */
+.title {
+  text-align: center;
+  font-size: 28px;
+  font-weight: bold;
+  color: #2c3e50;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.container_input{
+  width: 300px;
+}
+
+.container_user{
+  align-items: center;
+  width: 750px;
+  /* background-color: orange; */
+  display: flex;
+  justify-content: space-around;
+}
+
+
+.form{
+  display: flex;
+  justify-content: space-between;
+  /* background-color: orange; */
+  width: 90%;
+  margin: 0 auto;
+}
+
+
+.p-datatable-tbody > tr {
+  outline-color: transparent;
+  background: var(--my-datatable-row-background);
+  color: #e01212;
+  transition: background var(--my-datatable-transition-duration), color var(--my-datatable-transition-duration), border-color var(--my-datatable-transition-duration), outline-color var(--my-datatable-transition-duration), box-shadow var(--my-datatable-transition-duration);
+}
+
+.card{
+  padding-top: 50px;
+  width: 90%;
+  margin: 0 auto;}
+
+  .p-overlay-mask{
+    background: transparent;
+  }
+
+
+  /* Estilos generales del formulario */
+.credito-form {
+  padding: 1rem;
+  background: #f9f9f9;
+  border-radius: 8px;
+}
+
+/* Asegurar que los labels tengan buen espacio */
+.p-field label {
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 0.5rem;
+}
+
+/* Estilo de los inputs y textarea */
+.p-field input,
+.p-field textarea {
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  transition: border-color 0.3s ease;
+}
+
+
+/* DEUDA TOTAL */
+.deuda-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 0px;
+}
+
+.deuda-card {
+  width: 250px;
+  text-align: center;
+  font-size: 1.2rem;
+  background: #f4f4f4;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.deuda-total {
+  font-weight: bold;
+  color: #ff5252;
+  font-size: 1.5rem;
+}
+
+.container_buttons{
+  width: 100%;
+  /* background-color: red; */
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  height: 40px;
+}
+
+.p-button{
+  width: 100px;
+  height: 40px;
+}

@@ -79,6 +79,7 @@ export class CreditoComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.inicializaFormulario();
     this.listaUsuarios();
+    this.listaCredito();
   }
 
   inicializaFormulario() {

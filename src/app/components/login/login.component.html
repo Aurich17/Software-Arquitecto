@@ -1,7 +1,7 @@
 <div class="login-container" *ngIf="!isAuthenticated">
   <div class="login-box">
     <!-- LOGO DE LA EMPRESA -->
-    
+
     <h2>Inicio de Sesión</h2>
     <div class="logo-container">
       <img src="/logo.jpg">
@@ -34,7 +34,7 @@
   header="Registro"
   [modal]="true"
   [(visible)]="visible"
-  [style]="{ width: '25rem', height: '26rem' }"
+  [style]="{ width: '25rem', height: '32rem' }"
   [dismissableMask]="true"
 >
   <form [formGroup]="registerForm">
@@ -51,6 +51,11 @@
     <div class="input-group">
       <label for="correo">Correo</label>
       <input id="correo" type="text" formControlName="correo" placeholder="Ingresa tu correo" pInputText>
+    </div>
+
+    <div class="input-group">
+      <label for="telefono">Telefono</label>
+      <input id="telefono" type="text" formControlName="telefono" placeholder="Ingresa tu telefono" pInputText>
     </div>
 
     <button pButton label="Registrarse" (click)="registerUser()"></button>

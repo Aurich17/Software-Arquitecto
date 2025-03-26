@@ -54,9 +54,26 @@ export class LoginComponent implements OnInit {
       this.authService.login(username, password).subscribe(
         (response) => {
           if (response.success && response.token) {
-            this.authService.setToken(response.token); // Guarda el token y actualiza el estado de autenticación
+            this.authService.setToken(response.token);
             this.authService.setRol(response.rol)
-            this.router.navigate(['/credito']); // Redirigir después del login
+            this.authService.setRolId(response.rol_id)
+            switch (response.rol) {
+              case 'admin':
+                this.router.navigate(['/']);
+                break;
+              case 'cliente':
+                this.router.navigate(['/credito']);
+                break;
+              case 'corte_laser_1':
+                this.router.navigate(['/corte_laser']);
+                break;
+              case 'corte_laser_2':
+                this.router.navigate(['/corte_laser']);
+                break;
+              default:
+                this.router.navigate(['/']);
+                break;
+            }
           } else {
             this.loginError = true;
             this.errorMessage = 'Usuario o contraseña incorrectos';
@@ -81,27 +98,24 @@ export class LoginComponent implements OnInit {
 
   registerUser() {
     const values = this.registerForm.value;
-    console.log('Registrando usuario:', values);
     const request: LoginRequest = {
       username: values.username,
       password: values.password,
-      email: values.correo
+      email: values.correo,
+      celular: values.telefono
     };
 
     this.authService.registerUser(request).subscribe(
       (response) => {
-        console.log('Registro exitoso:', response);
-        this.visible = false; // Cierra el diálogo después de guardar
-
         this.messageService.add({
           severity: 'success',
           summary: 'Registro exitoso',
           detail: 'El usuario se ha registrado correctamente'
         });
+        this.visible = false; // Cierra el diálogo después de guardar
       },
       (error) => {
         console.error('Error al registrar:', error);
-
         this.messageService.add({
           severity: 'error',
           summary: 'Error en el registro',

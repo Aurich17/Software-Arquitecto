@@ -108,16 +108,10 @@
   font-size: 1.5rem;
 }
 
-.container_buttons{
-  width: 100%;
-  /* background-color: red; */
-  display: flex;
-  justify-content: space-around;
-  margin-top: 20px;
-  height: 40px;
-}
 
-.p-button{
-  width: 100px;
-  height: 40px;
+th,td{
+  text-align: center;
+  font-size: 14px;
+  justify-content: center;
+  align-items: center;
 }

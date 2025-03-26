@@ -64,4 +64,8 @@ export class AuthService {
   setRol(rol:string):void{
     localStorage.setItem('rol', rol);
   }
+
+  setRolId(id:string):void{
+    localStorage.setItem('rol_id', id);
+  }
 }

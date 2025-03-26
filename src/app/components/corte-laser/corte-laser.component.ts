@@ -19,13 +19,19 @@ import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { CreditoService } from '../../services/credito.service';
-import { CreditoRequest } from '../credito/request/credito.request';
-import { MantCreditoRequest } from '../credito/request/mantCredito.request';
-import { UsuarioRequest } from '../credito/request/usuario.request';
-import { CreditoResponse } from '../credito/response/credito.response';
+// import { CreditoService } from '../../services/credito.service';
+// import { CreditoRequest } from '../credito/request/credito.request';
+// import { MantCreditoRequest } from '../credito/request/mantCredito.request';
+// import { UsuarioRequest } from '../credito/request/usuario.request';
+// import { CreditoResponse } from '../credito/response/credito.response';
 import { UsuarioResponse } from '../credito/response/usuario.response';
+// import { GoogleAuthService } from '../../services/google-auth.service';
+// import { GoogleDriveService } from '../../services/google-drive.service';
+import { CorteLaserService } from '../../services/corte-laser.service';
+import { CorteLaserResponse } from './response/corte-laser.response';
+import { CorteLaserRequest, MantCorteLaserRequest } from './request/corte-laser.request';
 
+declare const gapi: any;
 @Component({
   selector: 'app-corte-laser',
   standalone: true,
@@ -47,7 +53,6 @@ import { UsuarioResponse } from '../credito/response/usuario.response';
     DialogModule,
     MessageModule,
     ToastModule,
-    AutoComplete,
     DatePickerModule,
     CardModule
   ],
@@ -56,22 +61,24 @@ import { UsuarioResponse } from '../credito/response/usuario.response';
   styleUrl: './corte-laser.component.css'
 })
 export class CorteLaserComponent implements OnInit, OnDestroy {
-  creditosTable: CreditoResponse[] = [];
+  corteLaserTable: CorteLaserResponse[] = [];
   usuarios: UsuarioResponse[] = [];
   items: any[] = [];
   group!: FormGroup; // Declaramos el FormGroup
   visible: boolean = false;
-  creditoForm!: FormGroup;
+  corteLaserForm!: FormGroup;
   selectedUserName: string = '';
   usuarioUnico = false;
   deudaTotal:number = 0;
+  file: File | null = null;
 
-  constructor(private fb: FormBuilder,private readonly creditoService: CreditoService,private messageService: MessageService ) {}
+  constructor(private fb: FormBuilder,private readonly corteLaserService: CorteLaserService,private messageService: MessageService) {}
 
   ngOnInit(): void {
     this.inicializaFormulario();
-    this.listaUsuarios();
+    // this.listaUsuarios();
     this.listaCredito();
+    // this.loadGoogleAPI();
   }
 
   inicializaFormulario() {
@@ -79,62 +86,50 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
       nombre_usuario: new FormControl('', Validators.required),
     });
 
-    this.creditoForm = new FormGroup({
+    this.corteLaserForm = new FormGroup({
       telefono: new FormControl(null, Validators.required),
       comentario: new FormControl('', null),
     });
   }
 
-  // Método para manejar el envío del formulario
-  onSubmit() {
-    if (this.group.valid) {
-      console.log(this.group.value);
-    }
-  }
 
+  // loadGoogleAPI() {
+  //   const script = document.createElement('script');
+  //   script.src = 'https://apis.google.com/js/api.js';
+  //   script.onload = () => {
+  //     gapi.load('auth2', () => {
+  //       gapi.auth2.init({
+  //         client_id: '209390540736-ava19ng5pl0r70p379cu94q3bos3ol12.apps.googleusercontent.com'
+  //       });
+  //     });
+  //   };
+  //   document.body.appendChild(script);
+  // }
   showDialog() {
     this.visible = true;
   }
 
-  guardarCredito() {
-    if (this.creditoForm.valid) {
-      console.log('Guardando crédito:', this.creditoForm.value);
-      this.visible = false; // Cierra el diálogo después de guardar
-    }
-  }
 
   ngOnDestroy(): void {
-    this.creditoForm.reset();
+    this.corteLaserForm.reset();
   }
 
   listaCredito() {
     const values = this.group.value;
     console.log('Values', values);
-    this.creditosTable = [];
+    this.corteLaserTable = [];
     this.deudaTotal = 0; // Reseteamos la deuda total antes de calcular
 
-    const request: CreditoRequest = {
-      p_id_usuario: values.nombre_usuario?.id || null,
+    const request: CorteLaserRequest = {
+      p_id_corte_laser: localStorage.getItem('rol_id') || '',
     };
-
-    this.usuarioUnico = request.p_id_usuario !== null;
-
-    this.creditoService.listaCredito(request).subscribe(
+    this.corteLaserService.listaCorteLaser(request).subscribe(
       (response) => {
-        this.creditosTable = response;
-
-        if (this.usuarioUnico) {
-          this.deudaTotal = 0; // ✅ Reiniciar la deuda antes de sumar
-          for (let i = 0; i < response.length; i++) {
-            this.deudaTotal += Number(response[i].monto_pendiente); // ✅ Convertir a número para evitar concatenación
-            console.log('Deuda total:', this.deudaTotal);
-          }
-        }
+        this.corteLaserTable = response;
 
         this.messageService.add({
           severity: 'success',
           summary: 'Búsqueda exitosa',
-          detail: 'Se encontraron los créditos',
         });
       },
       (error) => {
@@ -148,21 +143,20 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
     );
 }
 
-  listaUsuarios() {
-    this.usuarios = [];
-    const request: UsuarioRequest = {
-      filtro_nombre: "",
-    };
-    this.creditoService.listaUsuarios(request).subscribe(
-      (response) => {
-        this.usuarios = response
-        console.log('Usuarios', this.usuarios);
-      },
-      (error) => {
-        console.error(error);
-      }
-    );
-  }
+  // listaUsuarios() {
+  //   this.usuarios = [];
+  //   const request: UsuarioRequest = {
+  //     filtro_nombre: "",
+  //   };
+  //   this.creditoService.listaUsuarios(request).subscribe(
+  //     (response) => {
+  //       this.usuarios = response
+  //     },
+  //     (error) => {
+  //       console.error(error);
+  //     }
+  //   );
+  // }
 
   search(event: AutoCompleteCompleteEvent) {
     const query = event.query.toLowerCase();
@@ -170,26 +164,29 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
   }
 
 
-  mantCredito(){
-    const values = this.creditoForm.value;
-    const request:MantCreditoRequest = {
-      p_accion: 'I',
-      p_id_usuario: values.usuario.id,
-      p_monto_total: values.monto,
-      p_monto_pagado: 0,
-      p_cod_estado: '001',
-      p_descripcion: values.descripcion,
-      p_fecha_vencimiento: values.fecha_vencimiento
+  mantCorteLaser(accion:string, row:any,estado:any){
+    console.log('ESTA ES LA FILA', row);
+    const values = this.corteLaserForm.value;
+    const request:MantCorteLaserRequest = {
+      p_accion: accion,
+      p_id_corte_laser: accion === 'I' ? null : row.id_corte_laser,
+      p_nombre: accion === 'I' ? values.nombre : row.nombre,
+      p_numero_celular: accion === 'I' ? values.telefono : row.numero_celular,
+      p_nombre_archivo: accion === 'I' ? values.nombre_archivo : row.nombre_archivo,
+      p_link_archivo: accion === 'I' ? values.link_archivo : row.link_archivo,
+      p_comentario: accion === 'I' ? values.comentario : row.comentario,
+      p_estado: estado,
+      p_corte_laser: accion === 'I' ? null : row.corte_laser
     };
 
-    this.creditoService.mantCredito(request).subscribe(
+    this.corteLaserService.mantCorteLaser(request).subscribe(
       (response) => {
         this.messageService.add({
           severity: 'success',
-          summary: 'Credito guardado',
-          detail: 'Se guardo el credito',
+          summary: 'Actualizado Correctamente',
         });
-        this.creditoForm.reset();
+        this.listaCredito()
+        this.corteLaserForm.reset();
       },
       (error) => {
         console.error(error);
@@ -201,5 +198,4 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
       }
     );
   }
-
 }

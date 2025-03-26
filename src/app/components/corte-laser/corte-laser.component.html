@@ -1,6 +1,6 @@
-<h1 class="title">Corte Laser</h1>
+<h1 class="title">Mantenimiento Corte Laser</h1>
 
-<form action="" class="form" [formGroup]="group">
+<!-- <form action="" class="form" [formGroup]="group">
   <div class="container_user">
     <div class="container_input">
       <p-inputgroup>
@@ -16,45 +16,43 @@
           placeholder="Nombre usuario">
         </p-autocomplete>
       </p-inputgroup>
-      <!-- <div class="card flex justify-center">
-        <p-autocomplete [(ngModel)]="value" [suggestions]="items" (completeMethod)="search($event)" />
-      </div> -->
     </div>
     <p-button label="Buscar" icon="pi pi-search" (onClick)="listaCredito()"/>
     <p-button label="Nuevo Credito" icon="pi pi-plus" (onClick)="showDialog()"/>
     <p-button label="Pagar Credito" icon="pi pi-dollar" (onClick)="showDialog()" *ngIf="usuarioUnico"/>
   </div>
-  <p-button label="Excel" icon="pi pi-file-excel"/>
-</form>
-
+</form> -->
 <div class="card">
   <p-table
       [paginator]="true"
       [rows]="5"
-      [value]="creditosTable"
+      [value]="corteLaserTable"
       showGridlines
       [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template #header>
               <tr>
-                  <th>Usuario</th>
-                  <th>Monto Total</th>
-                  <th>Monto Pagado</th>
-                  <th>Monto Pendiente</th>
-                  <th>Estado</th>
-                  <th>Descripcion</th>
-                  <th>Fecha Vencimiento</th>
+                  <th  style="align-items: center; text-align: center;">Nombre</th>
+                  <th  style="align-items: center; text-align: center;">Celular</th>
+                  <th  style="align-items: center; text-align: center;">Nombre Archivo</th>
+                  <th  style="align-items: center; text-align: center;">Link Archivo</th>
+                  <th  style="align-items: center; text-align: center;">Estado</th>
+                  <th  style="align-items: center; text-align: center;">Comentario</th>
+                  <th  style="align-items: center; text-align: center;">Acciones</th>
               </tr>
           </ng-template>
           <ng-template #body let-product>
             <tr>
-                <td>{{ product.user_name }}</td>
-                <td>{{ product.monto_total }}</td>
-                <td>{{ product.monto_pagado }}</td>
-                <td>{{ product.monto_pendiente }}</td>
-                <td>{{ product.descripcion_estado }}</td>
-                <td>{{ product.descripcion }}</td>
-                <td>{{ product.fecha_vencimiento }}</td>
-            </tr>
+                <td style="align-items: center; text-align: center;">{{ product.nombre }}</td>
+                <td style="align-items: center; text-align: center;">{{ product.numero_celular }}</td>
+                <td style="align-items: center; text-align: center;">{{ product.nombre_archivo }}</td>
+                <td style="align-items: center; text-align: center;">{{ product.link_archivo }}</td>
+                <td style="align-items: center; text-align: center;">{{ product.des_tipo }}</td>
+                <td  style="align-items: center; text-align: center;">{{ product.comentario }}</td>
+                <td style="display: flex; justify-content: space-around;">
+                  <button pButton icon="pi pi-check-circle" class="p-button-rounded" [outlined]="true" severity="success" (click)="mantCorteLaser('U',product,'002')"></button>
+                  <button pButton icon="pi pi-times-circle" class="p-button-rounded" [outlined]="true" severity="danger"  (click)="mantCorteLaser('U',product,'004')"></button>
+                </td>
+              </tr>
           </ng-template>
   </p-table>
 </div>
@@ -79,23 +77,8 @@
   [style]="{ width: '30rem', height: 'auto' }"
   [contentStyle]="{ 'padding': '1.5rem' }">
 
-  <form [formGroup]="creditoForm" (ngSubmit)="guardarCredito()" class="credito-form">
+  <form [formGroup]="corteLaserForm" class="credito-form">
     <div class="p-fluid">
-
-      <!-- <div class="p-field p-grid">
-        <label for="usuario" class="p-col-12 p-md-4">Usuario</label>
-        <p-inputgroup>
-          <p-autocomplete
-            [style]="{'width': '200%'}"
-            [suggestions]="items"
-            (completeMethod)="search($event)"
-            optionLabel="nombre"
-            formControlName="usuario"
-            placeholder="Ingrese usuario"
-            >
-          </p-autocomplete>
-        </p-inputgroup>
-      </div> -->
 
       <div class="p-field p-grid">
         <label for="telefono" class="p-col-12 p-md-4">Numero de Celular</label>
@@ -111,15 +94,9 @@
         </div>
       </div>
 
-      <!-- <div class="p-field p-grid">
-        <label for="descripcion" class="p-col-12 p-md-4">Fecha Vencimiento</label>
-        <div class="p-col-12 p-md-8">
-          <p-datepicker formControlName="fecha_vencimiento" />
-        </div>
-      </div> -->
-      <div class="container_buttons">
+      <div>
         <button pButton type="button" label="Cancelar" icon="pi pi-times" class="p-button-text p-mr-2" (click)="visible = false"></button>
-        <button pButton type="submit" label="Guardar" icon="pi pi-save" class="p-button" [disabled]="creditoForm.invalid" (click)="mantCredito()"></button>
+        <button pButton type="submit" label="Guardar" icon="pi pi-save" class="p-button" [disabled]="corteLaserForm.invalid"></button>
       </div>
 
     </div>

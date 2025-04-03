@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { AutoComplete, AutoCompleteCompleteEvent } from 'primeng/autocomplete';
 import { ButtonModule } from 'primeng/button';
 import { CardModule } from 'primeng/card';
@@ -19,17 +19,12 @@ import { MessageModule } from 'primeng/message';
 import { SelectModule } from 'primeng/select';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-// import { CreditoService } from '../../services/credito.service';
-// import { CreditoRequest } from '../credito/request/credito.request';
-// import { MantCreditoRequest } from '../credito/request/mantCredito.request';
-// import { UsuarioRequest } from '../credito/request/usuario.request';
-// import { CreditoResponse } from '../credito/response/credito.response';
 import { UsuarioResponse } from '../credito/response/usuario.response';
-// import { GoogleAuthService } from '../../services/google-auth.service';
-// import { GoogleDriveService } from '../../services/google-drive.service';
 import { CorteLaserService } from '../../services/corte-laser.service';
 import { CorteLaserResponse } from './response/corte-laser.response';
 import { CorteLaserRequest, MantCorteLaserRequest } from './request/corte-laser.request';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+
 
 declare const gapi: any;
 @Component({
@@ -54,9 +49,10 @@ declare const gapi: any;
     MessageModule,
     ToastModule,
     DatePickerModule,
-    CardModule
+    CardModule,
+    ConfirmDialogModule,
   ],
-  providers: [MessageService],
+  providers: [MessageService,ConfirmationService],
   templateUrl: './corte-laser.component.html',
   styleUrl: './corte-laser.component.css'
 })
@@ -64,7 +60,7 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
   corteLaserTable: CorteLaserResponse[] = [];
   usuarios: UsuarioResponse[] = [];
   items: any[] = [];
-  group!: FormGroup; // Declaramos el FormGroup
+  group!: FormGroup;
   visible: boolean = false;
   corteLaserForm!: FormGroup;
   selectedUserName: string = '';
@@ -72,13 +68,11 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
   deudaTotal:number = 0;
   file: File | null = null;
 
-  constructor(private fb: FormBuilder,private readonly corteLaserService: CorteLaserService,private messageService: MessageService) {}
+  constructor(private readonly corteLaserService: CorteLaserService,private messageService: MessageService,private confirmationService: ConfirmationService) {}
 
   ngOnInit(): void {
     this.inicializaFormulario();
-    // this.listaUsuarios();
     this.listaCredito();
-    // this.loadGoogleAPI();
   }
 
   inicializaFormulario() {
@@ -92,19 +86,6 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
     });
   }
 
-
-  // loadGoogleAPI() {
-  //   const script = document.createElement('script');
-  //   script.src = 'https://apis.google.com/js/api.js';
-  //   script.onload = () => {
-  //     gapi.load('auth2', () => {
-  //       gapi.auth2.init({
-  //         client_id: '209390540736-ava19ng5pl0r70p379cu94q3bos3ol12.apps.googleusercontent.com'
-  //       });
-  //     });
-  //   };
-  //   document.body.appendChild(script);
-  // }
   showDialog() {
     this.visible = true;
   }
@@ -118,7 +99,7 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
     const values = this.group.value;
     console.log('Values', values);
     this.corteLaserTable = [];
-    this.deudaTotal = 0; // Reseteamos la deuda total antes de calcular
+    this.deudaTotal = 0;
 
     const request: CorteLaserRequest = {
       p_id_corte_laser: localStorage.getItem('rol_id') || '',
@@ -142,21 +123,6 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
       }
     );
 }
-
-  // listaUsuarios() {
-  //   this.usuarios = [];
-  //   const request: UsuarioRequest = {
-  //     filtro_nombre: "",
-  //   };
-  //   this.creditoService.listaUsuarios(request).subscribe(
-  //     (response) => {
-  //       this.usuarios = response
-  //     },
-  //     (error) => {
-  //       console.error(error);
-  //     }
-  //   );
-  // }
 
   search(event: AutoCompleteCompleteEvent) {
     const query = event.query.toLowerCase();
@@ -197,5 +163,74 @@ export class CorteLaserComponent implements OnInit, OnDestroy {
         });
       }
     );
+  }
+
+  reporteCorteDefectuoso(event: Event) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: '¿El documento se encuentra defectuoso?',
+        header: 'Documento defectuoso',
+        icon: 'pi pi-info-circle',
+        rejectLabel: 'Cancel',
+        rejectButtonProps: {
+            label: 'Cancelar',
+            severity: 'secondary',
+            outlined: true,
+        },
+        acceptButtonProps: {
+            label: 'Reportar',
+            severity: 'danger',
+        },
+
+        accept: () => {
+            this.messageService.add({ severity: 'error', summary: 'Reportado', detail: 'Corte reportado correctamente' });
+        }
+    });
+  }
+
+  procesoCorte(event: Event, index: number) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: '¿Desea trabajar el documento?',
+        header: 'Trabajar documento',
+        icon: 'pi pi-wrench',
+        rejectLabel: 'Cancel',
+        rejectButtonProps: {
+            label: 'Cancelar',
+            severity: 'secondary',
+            outlined: true,
+        },
+        acceptButtonProps: {
+            label: 'Trabajar',
+            severity: 'contrast',
+        },
+
+        accept: () => {
+            this.messageService.add({ severity: 'error', summary: 'Reportado', detail: 'Corte reportado correctamente' });
+        }
+    });
+  }
+
+  descargarDocumento(event: Event) {
+    this.confirmationService.confirm({
+        target: event.target as EventTarget,
+        message: '¿Desea descargar el documento?',
+        header: 'Descargar Documento',
+        icon: 'pi pi-download',
+        rejectLabel: 'Cancel',
+        rejectButtonProps: {
+            label: 'Cancelar',
+            severity: 'secondary',
+            outlined: true,
+        },
+        acceptButtonProps: {
+            label: 'Descargar',
+            severity: 'contrast',
+        },
+
+        accept: () => {
+            this.messageService.add({ severity: 'error', summary: 'Reportado', detail: 'Corte reportado correctamente' });
+        }
+    });
   }
 }

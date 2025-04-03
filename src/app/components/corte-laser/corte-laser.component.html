@@ -31,26 +31,42 @@
       [tableStyle]="{ 'min-width': '50rem' }">
           <ng-template #header>
               <tr>
-                  <th  style="align-items: center; text-align: center;">Nombre</th>
-                  <th  style="align-items: center; text-align: center;">Celular</th>
-                  <th  style="align-items: center; text-align: center;">Nombre Archivo</th>
-                  <th  style="align-items: center; text-align: center;">Link Archivo</th>
-                  <th  style="align-items: center; text-align: center;">Estado</th>
-                  <th  style="align-items: center; text-align: center;">Comentario</th>
-                  <th  style="align-items: center; text-align: center;">Acciones</th>
+                  <th style="align-items: center; text-align: center;">Nombre</th>
+                  <th style="align-items: center; text-align: center;">Celular</th>
+                  <th style="align-items: center; text-align: center;">Nombre Archivo</th>
+                  <th style="align-items: center; text-align: center;">Link Archivo</th>
+                  <th style="align-items: center; text-align: center;">Estado</th>
+                  <th style="align-items: center; text-align: center;">Comentario</th>
+                  <th style="align-items: center; text-align: center;">Acciones</th>
               </tr>
           </ng-template>
-          <ng-template #body let-product>
+          <ng-template #body let-product let-rowIndex="rowIndex">
             <tr>
                 <td style="align-items: center; text-align: center;">{{ product.nombre }}</td>
                 <td style="align-items: center; text-align: center;">{{ product.numero_celular }}</td>
                 <td style="align-items: center; text-align: center;">{{ product.nombre_archivo }}</td>
                 <td style="align-items: center; text-align: center;">{{ product.link_archivo }}</td>
                 <td style="align-items: center; text-align: center;">{{ product.des_tipo }}</td>
-                <td  style="align-items: center; text-align: center;">{{ product.comentario }}</td>
+                <td style="align-items: center; text-align: center;">{{ product.comentario }}</td>
                 <td style="display: flex; justify-content: space-around;">
-                  <button pButton icon="pi pi-check-circle" class="p-button-rounded" [outlined]="true" severity="success" (click)="mantCorteLaser('U',product,'002')"></button>
-                  <button pButton icon="pi pi-times-circle" class="p-button-rounded" [outlined]="true" severity="danger"  (click)="mantCorteLaser('U',product,'004')"></button>
+                  <button pButton icon="pi pi-wrench" class="p-button-rounded"
+                          [outlined]="true" severity="warn"
+                          (click)="procesoCorte($event, rowIndex)"
+                          [disabled]="rowIndex !== 0">
+                  </button>
+                  <button pButton icon="pi pi-check-circle" class="p-button-rounded"
+                          [outlined]="true" severity="success"
+                          (click)="procesoCorte($event, rowIndex)"
+                          [disabled]="rowIndex !== 0">
+                  </button>
+                  <button pButton icon="pi pi-cloud-download" class="p-button-rounded"
+                          [outlined]="true" severity="info"
+                          (click)="descargarDocumento($event)">
+                  </button>
+                  <button pButton icon="pi pi-times-circle" class="p-button-rounded"
+                          [outlined]="true" severity="danger"
+                          (click)="reporteCorteDefectuoso($event)">
+                  </button>
                 </td>
               </tr>
           </ng-template>
@@ -103,5 +119,5 @@
   </form>
 </p-dialog>
 <p-toast></p-toast>
-
-
+<p-confirmdialog />
+<!-- <p-button (click)="confirm2($event)" label="Delete" severity="danger" [outlined]="true" /> -->
